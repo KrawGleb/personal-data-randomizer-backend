@@ -5,6 +5,7 @@ using iLearning.PersonalDataRandomizer.Domain.Enums;
 using iLearning.PersonalDataRandomizer.Domain.Models;
 using iLearning.PersonalDataRandomizer.Domain.Models.Data.Name;
 using iLearning.PersonalDataRandomizer.Domain.Models.Data.Patronymic;
+using iLearning.PersonalDataRandomizer.Domain.Models.Data.Street;
 using iLearning.PersonalDataRandomizer.Domain.Models.Data.Surname;
 using iLearning.PersonalDataRandomizer.Infrastructure.Persistence;
 
@@ -27,21 +28,29 @@ public class RuDataService : IRuDataService
 
         var fullNames = await GetRandomFullNames(options.Size);
         var phones = GetRandomPhones(options.Size);
+        var addresses = await GetRandomAddresses(options.Size);
 
         var personalData = fullNames
             .Select(fullName => new PersonalData
             {
                 Index = _random.Next(),
-                Identifier = GetSeededGuid(_random.Next()),
+                Identifier = GetSeededGuid(),
                 FullName = fullName,
                 Address = "",
                 Phone = ""
-            })
-            .Zip(phones, (data, phone) =>
+            });
+
+        personalData = personalData.Zip(phones, (data, phone) =>
             {
                 data.Phone = phone;
                 return data;
             });
+
+        personalData = personalData.Zip(addresses, (data, address) =>
+        {
+            data.Address = address;
+            return data;
+        });
 
         return personalData;
     }
@@ -62,13 +71,13 @@ public class RuDataService : IRuDataService
 
     private async Task<IEnumerable<RuName>> GetRadomNamesAsync(int maleCount = 1, int femaleCount = 0)
     {
-        var males = await DataSetHelper<RuName>.GetRandomRowsAsync(
+        var males = await DataSetHelper.GetRandomRowsAsync(
             _context.RuNames,
             _random,
             maleCount,
             Gender.Male);
 
-        var females = await DataSetHelper<RuName>.GetRandomRowsAsync(
+        var females = await DataSetHelper.GetRandomRowsAsync(
             _context.RuNames,
             _random,
             femaleCount,
@@ -77,15 +86,39 @@ public class RuDataService : IRuDataService
         return males.Concat(females);
     }
 
+    private async Task<IEnumerable<string>> GetRandomAddresses(int count)
+    {
+        var cities = await DataSetHelper.GetRandomRowsAsync(
+            _context.RuCities,
+            _random,
+            count);
+
+        var streets = await DataSetHelper.GetRandomRowsAsync(
+            _context.RuStreets,
+            _random,
+            count);
+
+        var maxHouseNumber = _random.Next(100, 400);
+        var maxFlatNumber = _random.Next(50, 150);
+
+        var addresses = cities.Zip(streets, (city, street) => 
+            $"{city.Name} {street.Name} дом №{_random.Next(1, maxHouseNumber)}" + 
+                (_random.Next() % 2 == 0 
+                    ? "" 
+                    : $" кв.{_random.Next(1, maxFlatNumber)}"));
+
+        return addresses;
+    }
+ 
     private async Task<IEnumerable<RuSurname>> GetRandomSurnamesAsync(int maleCount = 1, int femaleCount = 0)
     {
-        var males = await DataSetHelper<RuSurname>.GetRandomRowsAsync(
+        var males = await DataSetHelper.GetRandomRowsAsync(
             _context.RuSurnames,
             _random,
             maleCount,
             Gender.Male);
 
-        var females = await DataSetHelper<RuSurname>.GetRandomRowsAsync(
+        var females = await DataSetHelper.GetRandomRowsAsync(
             _context.RuSurnames,
             _random,
             femaleCount,
@@ -96,13 +129,13 @@ public class RuDataService : IRuDataService
 
     private async Task<IEnumerable<RuPatronymic>> GetRandomPatronymicsAsync(int maleCount = 1, int femaleCount = 0)
     {
-        var males = await DataSetHelper<RuPatronymic>.GetRandomRowsAsync(
+        var males = await DataSetHelper.GetRandomRowsAsync(
             _context.RuPatronymics,
             _random,
             maleCount,
             Gender.Male);
 
-        var females = await DataSetHelper<RuPatronymic>.GetRandomRowsAsync(
+        var females = await DataSetHelper.GetRandomRowsAsync(
             _context.RuPatronymics,
             _random,
             femaleCount,
@@ -127,7 +160,7 @@ public class RuDataService : IRuDataService
         return phones;
     }
 
-    private string GetSeededGuid(int seed)
+    private string GetSeededGuid()
     {
         var guid = new byte[16];
         _random.NextBytes(guid);
