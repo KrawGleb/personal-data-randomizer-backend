@@ -14,6 +14,11 @@ public static class DependencyInjection
 
         services.AddScoped<IDataService, DataService>();
 
+        services.AddScoped<INamesService, NamesService>();
+        services.AddScoped<IPhonesService, PhonesService>();
+        services.AddScoped<IAddressesService, AddressesService>();
+        services.AddScoped<IPersonalDataService, PersonalDataService>();
+
         return services;
     }
 }
