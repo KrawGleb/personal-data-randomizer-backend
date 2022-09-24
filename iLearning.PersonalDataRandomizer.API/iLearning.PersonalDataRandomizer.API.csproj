@@ -10,4 +10,10 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\iLearning.PersonalDataRandomizer.Application\iLearning.PersonalDataRandomizer.Application.csproj" />
+    <ProjectReference Include="..\iLearning.PersonalDataRandomizer.Domain\iLearning.PersonalDataRandomizer.Domain.csproj" />
+    <ProjectReference Include="..\iLearning.PersonalDataRandomizer.Infrastructure\iLearning.PersonalDataRandomizer.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>

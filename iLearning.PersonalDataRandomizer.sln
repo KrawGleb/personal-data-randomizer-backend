@@ -5,6 +5,20 @@ VisualStudioVersion = 17.3.32819.101
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iLearning.PersonalDataRandomizer.API", "iLearning.PersonalDataRandomizer.API\iLearning.PersonalDataRandomizer.API.csproj", "{58EAEFC6-E106-46DF-B881-943680460F50}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2BCEB634-7B8B-489B-81CA-5DA4DE190ED9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{958FD869-454E-4ED3-9981-CB4C16805620}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitignore = .gitignore
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iLearning.PersonalDataRandomizer.Domain", "iLearning.PersonalDataRandomizer.Domain\iLearning.PersonalDataRandomizer.Domain.csproj", "{0BBD0ADC-D399-4986-BB99-320B07C52CBB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iLearning.PersonalDataRandomizer.Infrastructure", "iLearning.PersonalDataRandomizer.Infrastructure\iLearning.PersonalDataRandomizer.Infrastructure.csproj", "{6DCBCFF8-CBA6-4761-94A8-EFF04BB89D5D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iLearning.PersonalDataRandomizer.Application", "iLearning.PersonalDataRandomizer.Application\iLearning.PersonalDataRandomizer.Application.csproj", "{15804E38-E40E-4427-9FBE-E159E186C8AF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,9 +29,27 @@ Global
 		{58EAEFC6-E106-46DF-B881-943680460F50}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{58EAEFC6-E106-46DF-B881-943680460F50}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{58EAEFC6-E106-46DF-B881-943680460F50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0BBD0ADC-D399-4986-BB99-320B07C52CBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0BBD0ADC-D399-4986-BB99-320B07C52CBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0BBD0ADC-D399-4986-BB99-320B07C52CBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0BBD0ADC-D399-4986-BB99-320B07C52CBB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6DCBCFF8-CBA6-4761-94A8-EFF04BB89D5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6DCBCFF8-CBA6-4761-94A8-EFF04BB89D5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6DCBCFF8-CBA6-4761-94A8-EFF04BB89D5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6DCBCFF8-CBA6-4761-94A8-EFF04BB89D5D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15804E38-E40E-4427-9FBE-E159E186C8AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15804E38-E40E-4427-9FBE-E159E186C8AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15804E38-E40E-4427-9FBE-E159E186C8AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15804E38-E40E-4427-9FBE-E159E186C8AF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{58EAEFC6-E106-46DF-B881-943680460F50} = {2BCEB634-7B8B-489B-81CA-5DA4DE190ED9}
+		{0BBD0ADC-D399-4986-BB99-320B07C52CBB} = {2BCEB634-7B8B-489B-81CA-5DA4DE190ED9}
+		{6DCBCFF8-CBA6-4761-94A8-EFF04BB89D5D} = {2BCEB634-7B8B-489B-81CA-5DA4DE190ED9}
+		{15804E38-E40E-4427-9FBE-E159E186C8AF} = {2BCEB634-7B8B-489B-81CA-5DA4DE190ED9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F1AF6035-0B10-4F3F-90F4-69A7878E2698}
