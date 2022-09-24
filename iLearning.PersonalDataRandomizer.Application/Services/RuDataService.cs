@@ -13,7 +13,7 @@ namespace iLearning.PersonalDataRandomizer.Application.Services;
 public class RuDataService : IRuDataService
 {
     private readonly ApplicationDbContext _context;
-    
+
     private Random _random;
 
     public RuDataService(ApplicationDbContext context)
@@ -26,15 +26,21 @@ public class RuDataService : IRuDataService
         _random = new Random(options.Seed);
 
         var fullNames = await GetRandomFullNames(options.Size);
+        var phones = GetRandomPhones(options.Size);
 
         var personalData = fullNames
             .Select(fullName => new PersonalData
             {
-                Index = 0,
-                Identifier = "ToDo",
+                Index = _random.Next(),
+                Identifier = GetSeededGuid(_random.Next()),
                 FullName = fullName,
-                Address = "ToDo",
-                Phone = "ToDo"
+                Address = "",
+                Phone = ""
+            })
+            .Zip(phones, (data, phone) =>
+            {
+                data.Phone = phone;
+                return data;
             });
 
         return personalData;
@@ -103,6 +109,30 @@ public class RuDataService : IRuDataService
             Gender.Female);
 
         return males.Concat(females);
+    }
+
+    private IEnumerable<string> GetRandomPhones(int count)
+    {
+        var tempRange = Enumerable.Repeat(0, count);
+
+        var codes = tempRange.Select(_ => _random.Next(900, 999));
+        var firstNumbers = tempRange.Select(_ => _random.Next(100, 999));
+        var secondNumbers = tempRange.Select(_ => _random.Next(10, 99));
+        var thirdNumbers = tempRange.Select(_ => _random.Next(10, 99));
+
+        var phones = codes.Zip(firstNumbers, (code, number) => $"+7 ({code}) {number}")
+            .Zip(secondNumbers, (phone, number) => $"{phone} {number}")
+            .Zip(thirdNumbers, (phone, number) => $"{phone} {number}");
+
+        return phones;
+    }
+
+    private string GetSeededGuid(int seed)
+    {
+        var guid = new byte[16];
+        _random.NextBytes(guid);
+
+        return new Guid(guid).ToString();
     }
 
     private IEnumerable<string> ConcatFullNames(
