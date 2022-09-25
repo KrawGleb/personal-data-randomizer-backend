@@ -14,6 +14,7 @@ public class PhonesService : IPhonesService
         {
             Country.Russia => GetRuPhones(count),
             Country.USA => GetUsPhones(count),
+            Country.Poland => GetPlPhones(count),
             _ => Enumerable.Empty<string>(),
         };
     }
@@ -42,6 +43,18 @@ public class PhonesService : IPhonesService
         var phoneNumbers = tempRange.Select(_ => Random.Next(1_000_000, 9_999_999));
 
         var phones = areaCodes.Zip(phoneNumbers, (code, number) => $"+1 ({code}) {number}");
+
+        return phones;
+    }
+
+    private IEnumerable<string> GetPlPhones(int count)
+    {
+        var tempRange = Enumerable.Repeat(0, count);
+
+        var areaCodes = tempRange.Select(_ => Random.Next(PhoneConstants.PL_MIN_AREA_CODE, PhoneConstants.PL_MAX_AREA_CODE));
+        var phoneNumbers = tempRange.Select(_ => Random.Next(1_000_000, 9_999_999));
+
+        var phones = areaCodes.Zip(phoneNumbers, (code, number) => $"+48 ({code}) {number}");
 
         return phones;
     }

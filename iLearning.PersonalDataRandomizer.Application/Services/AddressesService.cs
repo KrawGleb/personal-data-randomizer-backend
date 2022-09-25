@@ -51,7 +51,7 @@ public class AddressesService : IAddressesService
         return country.ToLower() switch
         {
             Country.Russia => GetRuHouseAndFlat(maxHouseNumber, maxFlatNumber),
-            Country.Poland => "",
+            Country.Poland => GetPlHouseAndFlat(maxHouseNumber, maxFlatNumber),
             Country.USA => GetUsHouseAndFlat(maxHouseNumber, maxFlatNumber),
             _ => "",
         };
@@ -65,6 +65,13 @@ public class AddressesService : IAddressesService
     }
 
     private string GetUsHouseAndFlat(int maxHouseNumber, int maxFlatNumber)
+    {
+        var flatNumber = GetFlat(maxFlatNumber);
+        flatNumber = string.IsNullOrEmpty(flatNumber) ? flatNumber : $"/{flatNumber}";
+        return $"{Random.Next(1, maxHouseNumber)}{flatNumber}";
+    }
+
+    private string GetPlHouseAndFlat(int maxHouseNumber, int maxFlatNumber)
     {
         var flatNumber = GetFlat(maxFlatNumber);
         flatNumber = string.IsNullOrEmpty(flatNumber) ? flatNumber : $"/{flatNumber}";
