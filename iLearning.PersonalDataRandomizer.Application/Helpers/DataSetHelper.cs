@@ -12,23 +12,21 @@ public static class DataSetHelper
         int count,
         Gender gender) where T : Record
     {
-        // TODO: store total counts for each table in database
         var totalCount = set
             .Where(v => v.Gender == gender ||
                         v.Gender == Gender.Any)
-            .AsNoTracking()
             .Count();
 
-        var randomCount = random.Next(count, totalCount - count);
-        var startIndex = random.Next(0, totalCount - count);
+        var toTake = random.Next(count, totalCount - count);
+        var toSkip = random.Next(0, totalCount - count);
 
         var records = await set
+            .AsNoTracking()
             .Where(v => 
                 v.Gender == gender ||
                 v.Gender == Gender.Any)
-            .Skip(startIndex)
-            .Take(randomCount)
-            .AsNoTracking()
+            .Skip(toSkip)
+            .Take(toTake)
             .ToListAsync();
 
         return records
@@ -43,12 +41,12 @@ public static class DataSetHelper
     {
         var totalCount = set.Count();
 
-        var randomCount = random.Next(count, totalCount - count);
-        var startIndex = random.Next(0, totalCount - count);
+        var toTake = random.Next(count, totalCount - count);
+        var toSkip = random.Next(0, totalCount - count);
 
         var records = await set
-            .Skip(startIndex)
-            .Take(randomCount)
+            .Skip(toSkip)
+            .Take(toTake)
             .AsNoTracking()
             .ToListAsync();
 
