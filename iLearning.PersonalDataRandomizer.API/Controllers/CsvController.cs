@@ -13,7 +13,7 @@ namespace iLearning.PersonalDataRandomizer.API.Controllers;
 public class CsvController : ControllerBase
 {
     [HttpPost]
-    public async Task<FileResult> GenerateCsv(IEnumerable<PersonalData> data)
+    public async Task<FileResult> GenerateCsv([FromBody] IEnumerable<PersonalData> data)
     {
         var stringWriter = new StringWriter();
 
@@ -21,7 +21,7 @@ public class CsvController : ControllerBase
 
         var csvWriter = new CsvWriter(writer, new CsvConfiguration(CultureInfo.InvariantCulture)
         {
-            Delimiter = ";"
+            Delimiter = ","
         });
 
         await csvWriter.WriteRecordsAsync(data);
