@@ -1,7 +1,6 @@
 ﻿using iLearning.PersonalDataRandomizer.Domain.Enums;
 using iLearning.PersonalDataRandomizer.Domain.Models.Data;
 using Microsoft.EntityFrameworkCore;
-using System.Data.Entity.SqlServer;
 
 namespace iLearning.PersonalDataRandomizer.Application.Helpers;
 
@@ -14,9 +13,10 @@ public static class DataSetHelper
         Gender gender) where T : Record
     {
         // TODO: store total counts for each table in database
-        var totalCount = await set
+        var totalCount = set
             .Where(v => v.Gender == gender)
-            .CountAsync();
+            .AsNoTracking()
+            .Count();
 
         var randomCount = random.Next(count, totalCount - count);
         var startIndex = random.Next(0, totalCount - count);
@@ -25,6 +25,7 @@ public static class DataSetHelper
             .Where(v => v.Gender == gender)
             .Skip(startIndex)
             .Take(randomCount)
+            .AsNoTracking()
             .ToListAsync();
 
         return records
@@ -37,7 +38,7 @@ public static class DataSetHelper
         Random random,
         int count) where TEntity : class, new()
     {
-        var totalCount = await set.CountAsync();
+        var totalCount = set.Count();
 
         var randomCount = random.Next(count, totalCount - count);
         var startIndex = random.Next(0, totalCount - count);
@@ -45,6 +46,7 @@ public static class DataSetHelper
         var records = await set
             .Skip(startIndex)
             .Take(randomCount)
+            .AsNoTracking()
             .ToListAsync();
 
         return records
