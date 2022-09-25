@@ -31,18 +31,18 @@ public class DataCorruptionService : IDataCorruptionService
 
         for (int i = 0; i < exactErrors; i++)
         {
-            data = CorrupField(data, random);
+            data = CorruptField(data, random);
         }
 
         if (CheckChance(random, errorChance))
         {
-            data = CorrupField(data, random);
+            data = CorruptField(data, random);
         }
 
         return data;
     }
 
-    private PersonalData CorrupField(PersonalData data, Random random)
+    private PersonalData CorruptField(PersonalData data, Random random)
     {
         var prop = GetRandomFiled(random);
         var func = GetRandomErrorFunc(random);

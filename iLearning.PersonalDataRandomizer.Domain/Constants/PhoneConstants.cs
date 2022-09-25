@@ -2,6 +2,9 @@
 
 public static class PhoneConstants
 {
+    public const int RU_MIN_AREA_CODE = 900;
+    public const int RU_MAX_AREA_CODE = 999;
+
     public const int US_MIN_AREA_CODE = 203;
     public const int US_MAX_AREA_CODE = 999;
 

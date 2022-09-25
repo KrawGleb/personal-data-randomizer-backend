@@ -23,12 +23,13 @@ public class PhonesService : IPhonesService
     {
         var tempRange = Enumerable.Repeat(0, count);
 
-        var codes = tempRange.Select(_ => Random.Next(900, 999));
+        var areaCodes = tempRange.Select(_ => 
+            Random.Next(PhoneConstants.RU_MIN_AREA_CODE, PhoneConstants.RU_MAX_AREA_CODE));
         var firstNumbers = tempRange.Select(_ => Random.Next(100, 999));
         var secondNumbers = tempRange.Select(_ => Random.Next(10, 99));
         var thirdNumbers = tempRange.Select(_ => Random.Next(10, 99));
 
-        var phones = codes.Zip(firstNumbers, (code, number) => $"+7 ({code}) {number}")
+        var phones = areaCodes.Zip(firstNumbers, (code, number) => $"+7 ({code}) {number}")
             .Zip(secondNumbers, (phone, number) => $"{phone} {number}")
             .Zip(thirdNumbers, (phone, number) => $"{phone} {number}");
 
