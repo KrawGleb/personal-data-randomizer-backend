@@ -1,11 +1,8 @@
 ﻿using iLearning.PersonalDataRandomizer.Application.Helpers;
 using iLearning.PersonalDataRandomizer.Application.Services.Interfaces;
 using iLearning.PersonalDataRandomizer.Domain.Enums;
-using iLearning.PersonalDataRandomizer.Domain.Models.Data.Name;
-using iLearning.PersonalDataRandomizer.Domain.Models.Data.Patronymic;
-using iLearning.PersonalDataRandomizer.Domain.Models.Data.Surname;
+using iLearning.PersonalDataRandomizer.Domain.Models.Data;
 using iLearning.PersonalDataRandomizer.Infrastructure.Persistence;
-using System;
 
 namespace iLearning.PersonalDataRandomizer.Application.Services;
 
@@ -20,30 +17,34 @@ public class NamesService : INamesService
 
     public Random Random { get; set; }
 
-    public async Task<IEnumerable<string>> GetRandomFullNames(int count)
+    public async Task<IEnumerable<string>> GetRandomFullNames<TName, TSurname, TPatronymics>(int count)
+        where TName : Record
+        where TSurname : Record
+        where TPatronymics : Record
     {
         int maleCount = Random.Next(0, count);
         int femaleCount = count - maleCount;
 
-        var surnames = await GetRandomSurnamesAsync(maleCount, femaleCount);
-        var names = await GetRadomNamesAsync(maleCount, femaleCount);
-        var patronymics = await GetRandomPatronymicsAsync(maleCount, femaleCount);
+        var surnames = await GetRandomRecords<TSurname>(maleCount, femaleCount);
+        var names = await GetRandomRecords<TName>(maleCount, femaleCount);
+        var patronymics = await GetRandomRecords<TPatronymics>(maleCount, femaleCount);
 
         var fullNames = ConcatFullNames(surnames, names, patronymics);
 
         return fullNames;
     }
 
-    private async Task<IEnumerable<RuName>> GetRadomNamesAsync(int maleCount = 1, int femaleCount = 0)
+    private async Task<IEnumerable<T>> GetRandomRecords<T>(int maleCount = 1, int femaleCount = 0)
+        where T: Record
     {
-        var males = await DataSetHelper.GetRandomRowsAsync(
-            _context.RuNames,
+        var males = await DataSetHelper.GetRandomRowsAsync<T>(
+            _context.Set<T>(),
             Random,
             maleCount,
             Gender.Male);
 
-        var females = await DataSetHelper.GetRandomRowsAsync(
-            _context.RuNames,
+        var females = await DataSetHelper.GetRandomRowsAsync<T>(
+            _context.Set<T>(),
             Random,
             femaleCount,
             Gender.Female);
@@ -51,44 +52,13 @@ public class NamesService : INamesService
         return males.Concat(females);
     }
 
-    private async Task<IEnumerable<RuSurname>> GetRandomSurnamesAsync(int maleCount = 1, int femaleCount = 0)
-    {
-        var males = await DataSetHelper.GetRandomRowsAsync(
-            _context.RuSurnames,
-            Random,
-            maleCount,
-            Gender.Male);
-
-        var females = await DataSetHelper.GetRandomRowsAsync(
-            _context.RuSurnames,
-            Random,
-            femaleCount,
-            Gender.Female);
-
-        return males.Concat(females);
-    }
-
-    private async Task<IEnumerable<RuPatronymic>> GetRandomPatronymicsAsync(int maleCount = 1, int femaleCount = 0)
-    {
-        var males = await DataSetHelper.GetRandomRowsAsync(
-            _context.RuPatronymics,
-            Random,
-            maleCount,
-            Gender.Male);
-
-        var females = await DataSetHelper.GetRandomRowsAsync(
-            _context.RuPatronymics,
-            Random,
-            femaleCount,
-            Gender.Female);
-
-        return males.Concat(females);
-    }
-
-    private IEnumerable<string> ConcatFullNames(
-        IEnumerable<RuSurname> surnames,
-        IEnumerable<RuName> names,
-        IEnumerable<RuPatronymic> patronymics)
+    private IEnumerable<string> ConcatFullNames<TSurname, TName, TPatronymic>(
+        IEnumerable<TSurname> surnames,
+        IEnumerable<TName> names,
+        IEnumerable<TPatronymic> patronymics)
+        where TSurname : Record
+        where TName : Record
+        where TPatronymic: Record
     {
         var surnamesWithNames = surnames.Zip(names, (surname, name) => $"{surname.Value} {name.Value}");
         var fullNames = surnamesWithNames.Zip(patronymics, (name, patronymics) => $"{name} {patronymics.Value}");

@@ -14,7 +14,8 @@ public static class DataSetHelper
     {
         // TODO: store total counts for each table in database
         var totalCount = set
-            .Where(v => v.Gender == gender)
+            .Where(v => v.Gender == gender ||
+                        v.Gender == Gender.Any)
             .AsNoTracking()
             .Count();
 

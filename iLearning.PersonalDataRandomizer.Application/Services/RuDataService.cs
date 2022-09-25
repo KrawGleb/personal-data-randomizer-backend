@@ -1,6 +1,9 @@
 ﻿using iLearning.PersonalDataRandomizer.Application.Services.Interfaces;
 using iLearning.PersonalDataRandomizer.Domain;
 using iLearning.PersonalDataRandomizer.Domain.Models;
+using iLearning.PersonalDataRandomizer.Domain.Models.Data.Name;
+using iLearning.PersonalDataRandomizer.Domain.Models.Data.Patronymic;
+using iLearning.PersonalDataRandomizer.Domain.Models.Data.Surname;
 
 namespace iLearning.PersonalDataRandomizer.Application.Services;
 
@@ -32,7 +35,7 @@ public class RuDataService : IRuDataService
         _phonesService.Random = _random;
         _addressesService.Random = _random;
 
-        var fullNames = await _namesService.GetRandomFullNames(options.Size);
+        var fullNames = await _namesService.GetRandomFullNames<RuName, RuSurname, RuPatronymic>(options.Size);
         var phones = _phonesService.GetRandomPhones(options.Size);
         var addresses = await _addressesService.GetRandomAddresses(options.Size);
 

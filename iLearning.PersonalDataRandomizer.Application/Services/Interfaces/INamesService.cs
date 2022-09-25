@@ -1,8 +1,13 @@
-﻿namespace iLearning.PersonalDataRandomizer.Application.Services.Interfaces;
+﻿using iLearning.PersonalDataRandomizer.Domain.Models.Data;
+
+namespace iLearning.PersonalDataRandomizer.Application.Services.Interfaces;
 
 public interface INamesService
 {
     Random Random { get; set; }
 
-    Task<IEnumerable<string>> GetRandomFullNames(int count);
+    Task<IEnumerable<string>> GetRandomFullNames<TName, TSurname, TPatronymics>(int count)
+        where TName: Record
+        where TSurname: Record
+        where TPatronymics: Record;
 }
