@@ -26,5 +26,6 @@ public class ApplicationDbContext : DbContext
 
     public DbSet<UsName> UsNames { get; set; }
     public DbSet<UsSurname> UsSurnames { get; set; }
+    public DbSet<UsCity> UsCities { get; set; }
     public DbSet<UsStreet> UsStreets { get; set; }
 }

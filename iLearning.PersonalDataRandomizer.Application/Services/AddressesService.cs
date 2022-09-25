@@ -52,20 +52,29 @@ public class AddressesService : IAddressesService
         {
             Country.Russia => GetRuHouseAndFlat(maxHouseNumber, maxFlatNumber),
             Country.Poland => "",
-            Country.USA => "",
+            Country.USA => GetUsHouseAndFlat(maxHouseNumber, maxFlatNumber),
             _ => "",
         };
     }
 
     private string GetRuHouseAndFlat(int maxHouseNumber, int maxFlatNumber)
     {
-        return $"д.{Random.Next(1, maxHouseNumber)} {GetFlat(maxFlatNumber)}";
+        var flatNumber = GetFlat(maxFlatNumber);
+        flatNumber = string.IsNullOrEmpty(flatNumber) ? flatNumber : $"кв.{flatNumber}";
+        return $"д.{Random.Next(1, maxHouseNumber)} {flatNumber}";
+    }
+
+    private string GetUsHouseAndFlat(int maxHouseNumber, int maxFlatNumber)
+    {
+        var flatNumber = GetFlat(maxFlatNumber);
+        flatNumber = string.IsNullOrEmpty(flatNumber) ? flatNumber : $"/{flatNumber}";
+        return $"{Random.Next(1, maxHouseNumber)}{flatNumber}";
     }
 
     private string GetFlat(int maxFlatNumber)
     {
         return Random.NextBool()
             ? ""
-            : $" кв.{Random.Next(1, maxFlatNumber)}";
+            : Random.Next(1, maxFlatNumber).ToString();
     }
 }

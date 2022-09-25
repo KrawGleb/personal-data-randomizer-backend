@@ -38,7 +38,7 @@ public class RuDataService : IRuDataService
         _addressesService.Random = _random;
 
         var fullNames = await _namesService.GetRandomFullNames<RuName, RuSurname, RuPatronymic>(options.Size);
-        var phones = _phonesService.GetRandomPhones(options.Size);
+        var phones = _phonesService.GetRandomPhones(options.Country, options.Size);
         var addresses = await _addressesService.GetRandomAddresses<RuCity, RuStreet>(options.Size);
 
         var personalData = _personalDataService.BuildPersonalData(_random, fullNames, addresses, phones);
