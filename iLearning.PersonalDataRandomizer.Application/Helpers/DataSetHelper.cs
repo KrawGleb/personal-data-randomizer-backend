@@ -23,7 +23,9 @@ public static class DataSetHelper
         var startIndex = random.Next(0, totalCount - count);
 
         var records = await set
-            .Where(v => v.Gender == gender)
+            .Where(v => 
+                v.Gender == gender ||
+                v.Gender == Gender.Any)
             .Skip(startIndex)
             .Take(randomCount)
             .AsNoTracking()
@@ -37,7 +39,7 @@ public static class DataSetHelper
     public static async Task<IEnumerable<TEntity>> GetRandomRowsAsync<TEntity>(
         DbSet<TEntity> set,
         Random random,
-        int count) where TEntity : class, new()
+        int count) where TEntity: class
     {
         var totalCount = set.Count();
 

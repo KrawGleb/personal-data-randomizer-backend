@@ -10,4 +10,8 @@ public interface INamesService
         where TName: Record
         where TSurname: Record
         where TPatronymics: Record;
+
+    Task<IEnumerable<string>> GetRandomFullNames<TName, TSurname>(int count)
+        where TName : Record
+        where TSurname : Record;
 }

@@ -34,6 +34,21 @@ public class NamesService : INamesService
         return fullNames;
     }
 
+    public async Task<IEnumerable<string>> GetRandomFullNames<TName, TSurname>(int count)
+        where TName: Record
+        where TSurname : Record
+    {
+        int maleCount = Random.Next(0, count);
+        int femaleCount = count - maleCount;
+
+        var surnames = await GetRandomRecords<TSurname>(maleCount, femaleCount);
+        var names = await GetRandomRecords<TName>(maleCount, femaleCount);
+
+        var fullNames = ConcatFullNames(surnames, names);
+
+        return fullNames;
+    }
+
     private async Task<IEnumerable<T>> GetRandomRecords<T>(int maleCount = 1, int femaleCount = 0)
         where T: Record
     {
@@ -64,5 +79,14 @@ public class NamesService : INamesService
         var fullNames = surnamesWithNames.Zip(patronymics, (name, patronymics) => $"{name} {patronymics.Value}");
 
         return fullNames;
+    }
+
+    private IEnumerable<string> ConcatFullNames<TSurname, TName>(
+        IEnumerable<TSurname> surnames,
+        IEnumerable<TName> names)
+        where TName: Record
+        where TSurname: Record
+    {
+        return surnames.Zip(names, (surname, name) => $"{surname.Value} {name.Value}").ToList();
     }
 }

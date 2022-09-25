@@ -1,13 +1,48 @@
 ﻿using iLearning.PersonalDataRandomizer.Application.Services.Interfaces;
 using iLearning.PersonalDataRandomizer.Domain;
 using iLearning.PersonalDataRandomizer.Domain.Models;
+using iLearning.PersonalDataRandomizer.Domain.Models.Data.Name;
+using iLearning.PersonalDataRandomizer.Domain.Models.Data.Surname;
 
 namespace iLearning.PersonalDataRandomizer.Application.Services;
 
 public class USDataService : IUSDataService
 {
+    private readonly IPersonalDataService _personalDataService;
+    private readonly INamesService _namesService;
+    private readonly IPhonesService _phonesService;
+    private readonly IAddressesService _addressesService;
+    private Random _random;
+
+    public USDataService(
+        IPersonalDataService personalDataService,
+        INamesService namesService,
+        IPhonesService phonesService,
+        IAddressesService addressesService)
+    {
+        _personalDataService = personalDataService;
+        _namesService = namesService;
+        _phonesService = phonesService;
+        _addressesService = addressesService;
+    }
+
     public async Task<IEnumerable<PersonalData>> GeneratePersonalDataAsync(RandomOptions options)
     {
-        throw new NotImplementedException();
+        _random = new Random(options.Seed);
+
+        _namesService.Random = _random;
+        _phonesService.Random = _random;
+        _addressesService.Random = _random;
+
+        var fullNames = await _namesService.GetRandomFullNames<UsName, UsSurname>(options.Size);
+
+        var personalData = _personalDataService
+            .BuildPersonalData(
+                _random, 
+                fullNames, 
+                Enumerable.Repeat("", options.Size),
+                Enumerable.Repeat("", options.Size));
+
+        return personalData;
     }
 }
